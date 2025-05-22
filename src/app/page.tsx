@@ -1,15 +1,15 @@
 "use client";
-import Lottie from "lottie-react";
+import dynamic from "next/dynamic";
 import pdfAnimation from "../assets/animations/pdf-animation.json";
 import Link from "next/link";
 import Navbar from "@/components/shared/Navbar";
 
+const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
+
 export default function Home() {
   return (
     <main className="min-h-screen bg-white text-gray-800">
-      {/* Navbar */}
       <Navbar />
-      {/* Hero Section */}
       <section className="relative py-20 px-6 min-h-screen sm:px-12 lg:flex lg:items-center">
         <div className="max-w-2xl mx-auto text-center lg:text-left">
           <h1 className="text-4xl sm:text-5xl font-bold mb-6 leading-tight">

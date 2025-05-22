@@ -1,8 +1,8 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Document, Schema } from "mongoose";
 
 
 // TypeScript interface for type safety
-export interface IUser {
+export interface IUser extends Document {
   name: string;
   email: string;
   password: string;
