@@ -1,9 +1,28 @@
 "use client";
-import React, { useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
 
 const EmailVerificationPage = () => {
   const [otp, setOtp] = useState(Array(6).fill(""));
+  const [isResending, setIsResending] = useState(false);
+  const [timer, setTimer] = useState(60); // countdown timer
   const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const routere = useRouter();
+
+  useEffect(() => {
+    let countdown: NodeJS.Timeout;
+
+    if (timer > 0) {
+      countdown = setInterval(() => {
+        setTimer((prev) => prev - 1);
+      }, 1000);
+    }
+
+    return () => clearInterval(countdown);
+  }, [timer]);
 
   const handleChange = (index: number, value: string) => {
     if (!/^\d?$/.test(value)) return;
@@ -40,14 +59,80 @@ const EmailVerificationPage = () => {
     e.preventDefault();
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const code = otp.join("");
-    console.log("Verifying OTP:", code);
-    // Replace with actual API call
+    if (code.length < 6) {
+      toast.error("Please enter a valid OTP");
+      return;
+    }
+    try {
+      setIsSubmitting(true);
+      const verifyOTPRes = await fetch("/api/auth/verify-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ otp: code }),
+      });
+      // if (!verifyOTPRes.ok) throw new Error("OTP verification failed");
+      const data = await verifyOTPRes.json();
+      if (data.success) {
+        toast.success("Email verified successfully!");
+        routere.push("/dashboard");
+      } else {
+        toast.error(data.message || "Invalid OTP");
+      }
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(
+          error.message || "Failed to verify email. Please try again."
+        );
+        console.error("Error verifying OTP:", error.message);
+      } else {
+        toast.error("An unknown error occurred.");
+        console.error("Unknown error verifying OTP:", error);
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleResendOtp = async () => {
+    setIsResending(true);
+    try {
+      const emailRes = await fetch("/api/auth/verification-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await emailRes.json();
+
+      if (data.success) {
+        toast.success("OTP resent successfully!");
+        setTimer(60); // Reset timer
+      } else {
+        toast.error(data.message || "Failed to resend OTP. Try again.");
+      }
+    } catch (error) {
+      console.log("Failed to resend OTP: ",error)
+      toast.error("Failed to resend OTP. Please try again.");
+    } finally {
+      setIsResending(false);
+    }
+  };
+
+  const formatTimer = (seconds: number) => {
+    const m = Math.floor(seconds / 60)
+      .toString()
+      .padStart(2, "0");
+    const s = (seconds % 60).toString().padStart(2, "0");
+    return `${m}:${s}`;
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 px-4">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 px-4 sm:bg-[url(/images/auth-img.jpg)] bg-cover bg-no-repeat bg-center">
       <div className="bg-white shadow-md rounded-lg p-6 max-w-sm w-full">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-extrabold text-blue-700 tracking-wide">
@@ -84,12 +169,34 @@ const EmailVerificationPage = () => {
             />
           ))}
         </div>
+
         <button
           onClick={handleSubmit}
           className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none"
         >
-          Verify
+          {isSubmitting ? "Verifying..." : "Verify"}
         </button>
+
+        <button
+          onClick={handleResendOtp}
+          disabled={isResending || timer > 0}
+          className="w-full py-2 px-4 my-2 border border-blue-600 text-blue-600 font-semibold rounded-md hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {isResending
+            ? "Resending..."
+            : timer > 0
+            ? `Resend OTP in ${formatTimer(timer)}`
+            : "Resend OTP"}
+        </button>
+
+        {timer > 0 && (
+          <p className="text-center text-sm text-gray-500 mt-1">
+            You can resend OTP after{" "}
+            <span className="text-blue-600 font-bold">
+              {formatTimer(timer)}
+            </span>
+          </p>
+        )}
       </div>
     </div>
   );

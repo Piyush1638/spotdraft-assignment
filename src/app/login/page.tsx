@@ -3,6 +3,9 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { GrFormViewHide } from "react-icons/gr";
 import { BiShow } from "react-icons/bi";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+
 
 interface LoginForm {
   email: string;
@@ -17,6 +20,8 @@ const LoginPage = () => {
   const [errors, setErrors] = useState<Partial<LoginForm>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  const router = useRouter();
 
   const validate = () => {
     const newErrors: Partial<LoginForm> = {};
@@ -46,10 +51,14 @@ const LoginPage = () => {
         body: JSON.stringify(formData),
       });
 
-      if (!res.ok) throw new Error("Login failed");
-
       const data = await res.json();
-      console.log("Login successful:", data);
+      if (data.success) {
+        toast.success("Login successful");
+        // Redirect to the dashboard or home page
+        router.push("/dashboard");
+      }else{
+        toast.error(data.message || "Login failed");
+      }
     } catch (error) {
       console.error("Login error:", error);
     } finally {
@@ -58,7 +67,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 sm:bg-[url(/images/auth-img.jpg)] bg-cover bg-no-repeat bg-center">
       <div className="w-full max-w-md bg-white shadow-md rounded-lg p-6 sm:p-8">
         {/* Brand Name */}
         <div className="text-center mb-2">
@@ -158,7 +167,7 @@ const LoginPage = () => {
           Don&apos;t have an account?{" "}
           <Link
             href="/signup"
-            className="text-blue-600 hover:underline font-semibold"
+            className="text-blue-600 hover:underline "
           >
             Sign Up
           </Link>
