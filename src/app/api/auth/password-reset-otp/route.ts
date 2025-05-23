@@ -31,8 +31,8 @@ const resetPasswordOTP = async (req: NextRequest) => {
     if (!user) {
       return NextResponse.json(
         {
-          message: "Account doesn't exist with this email. If it does, an OTP has been sent.",
-          success: true,
+          message: "Account doesn't exist with this email.",
+          success: false,
         },
         { status: 200 }
       );

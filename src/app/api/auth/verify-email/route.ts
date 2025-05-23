@@ -40,7 +40,7 @@ const verifyOtpHandler = async (req: NextRequest) => {
 
     if (user.verifyOtp !== otp || user.verifyOtp == "") {
       return NextResponse.json(
-        { message: "Invalid OTP", success: false },
+        { message: "Wrong OTP!", success: false },
         { status: 400 }
       );
     }

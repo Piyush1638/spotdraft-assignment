@@ -1,152 +1,75 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
-import Link from "next/link";
-import { FaFilePdf } from "react-icons/fa";
-import Navbar from "@/components/shared/Navbar";
+import { useState, useEffect } from "react";
+import Image from "next/image";
 import LogoutButton from "@/components/shared/LogoutButton";
+import MyPdf from "@/components/dashboard/MyPdf";
+import SharedPdf from "@/components/dashboard/SharedPdf";
+import InvitedPdf from "@/components/dashboard/InvitedPdf";
+import UploadPdf from "@/components/dashboard/UploadPdf";
+import Link from "next/link";
 
-type SortOrder = "asc" | "desc";
-
-const pdfFiles = [
-  { id: "1", name: "Project Proposal.pdf", uploadedAt: "2024-05-15T10:30:00Z" },
-  {
-    id: "2",
-    name: "Marketing Strategy 2024.pdf",
-    uploadedAt: "2024-05-18T14:15:00Z",
-  },
-  { id: "3", name: "Product Roadmap.pdf", uploadedAt: "2024-05-12T09:00:00Z" },
-  { id: "4", name: "Budget Report Q1.pdf", uploadedAt: "2024-05-20T16:45:00Z" },
-  { id: "5", name: "Meeting Notes.pdf", uploadedAt: "2024-05-10T08:00:00Z" },
-  { id: "6", name: "Project Proposal.pdf", uploadedAt: "2024-05-15T10:30:00Z" },
-  {
-    id: "7",
-    name: "Marketing Strategy 2024.pdf",
-    uploadedAt: "2024-05-18T14:15:00Z",
-  },
-  { id: "8", name: "Product Roadmap.pdf", uploadedAt: "2024-05-12T09:00:00Z" },
-  { id: "9", name: "Budget Report Q1.pdf", uploadedAt: "2024-05-20T16:45:00Z" },
-  { id: "10", name: "Meeting Notes.pdf", uploadedAt: "2024-05-10T08:00:00Z" },
-  { id: "11", name: "Project Proposal.pdf", uploadedAt: "2024-05-15T10:30:00Z" },
-  {
-    id: "12",
-    name: "Marketing Strategy 2024.pdf",
-    uploadedAt: "2024-05-18T14:15:00Z",
-  },
-  { id: "13", name: "Product Roadmap.pdf", uploadedAt: "2024-05-12T09:00:00Z" },
-  { id: "14", name: "Budget Report Q1.pdf", uploadedAt: "2024-05-20T16:45:00Z" },
-  { id: "15", name: "Meeting Notes.pdf", uploadedAt: "2024-05-10T08:00:00Z" },
-  { id: "16", name: "Project Proposal.pdf", uploadedAt: "2024-05-15T10:30:00Z" },
-  {
-    id: "17",
-    name: "Marketing Strategy 2024.pdf",
-    uploadedAt: "2024-05-18T14:15:00Z",
-  },
-  { id: "18", name: "Product Roadmap.pdf", uploadedAt: "2024-05-12T09:00:00Z" },
-  { id: "19", name: "Budget Report Q1.pdf", uploadedAt: "2024-05-20T16:45:00Z" },
-  { id: "20", name: "Meeting Notes.pdf", uploadedAt: "2024-05-10T08:00:00Z" },
-];
+type DashboardView = "my" | "shared" | "invited" | "upload";
 
 export default function Dashboard() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
+  const [view, setView] = useState<DashboardView>("my");
   const [hasMounted, setHasMounted] = useState(false);
 
-  useEffect(() => {
-    setHasMounted(true);
-  }, []);
-
-  const filteredFiles = useMemo(() => {
-    return pdfFiles.filter((file) =>
-      file.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }, [searchTerm]);
-
-  const sortedFiles = useMemo(() => {
-    return [...filteredFiles].sort((a, b) => {
-      return sortOrder === "asc"
-        ? new Date(a.uploadedAt).getTime() - new Date(b.uploadedAt).getTime()
-        : new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime();
-    });
-  }, [filteredFiles, sortOrder]);
-
+  useEffect(() => setHasMounted(true), []);
   if (!hasMounted) return null;
 
   return (
-    <main className="min-h-screen bg-gray-100">
-      <Navbar />
-
-      <header className="max-w-7xl mx-auto px-6 py-10">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
-          <div>
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">Your PDFs</h1>
-            <p className="text-gray-600">Search, sort, and manage your uploaded PDF files.</p>
-          </div>
-          <button className="mt-4 sm:mt-0">
-            Upload New PDF
-          </button>
+    <div className="flex h-screen bg-gray-100">
+      {/* Sidebar */}
+      <aside className="w-64 bg-white border-r border-gray-200 shadow-sm hidden md:flex flex-col">
+        <Link href={"/"} className="p-6 font-bold text-lg">
+          <Image src="/images/brand.png" height={50} width={100} alt="logo" />
+        </Link>
+        <nav className="flex-1 px-4">
+          <ul className="space-y-2">
+            <li>
+              <button onClick={() => setView("my")} className="w-full text-left text-gray-700 hover:bg-blue-100 px-3 py-2 rounded-md">
+                My PDF
+              </button>
+            </li>
+            <li>
+              <button onClick={() => setView("shared")} className="w-full text-left text-gray-700 hover:bg-blue-100 px-3 py-2 rounded-md">
+                Shared PDF
+              </button>
+            </li>
+            <li>
+              <button onClick={() => setView("invited")} className="w-full text-left text-gray-700 hover:bg-blue-100 px-3 py-2 rounded-md">
+                Invited PDF
+              </button>
+            </li>
+            <li>
+              <button onClick={() => setView("upload")} className="w-full text-left text-gray-700 hover:bg-blue-100 px-3 py-2 rounded-md">
+                Upload PDF
+              </button>
+            </li>
+          </ul>
+        </nav>
+        <div className="p-4">
+          <LogoutButton />
         </div>
+      </aside>
 
-        <LogoutButton/>
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <main className="flex-1 p-6 overflow-y-auto">
+          <h1 className="text-2xl font-bold text-gray-800 mb-4">
+            {view === "my" && "Your PDFs"}
+            {view === "shared" && "Shared PDFs"}
+            {view === "invited" && "Invited PDFs"}
+            {view === "upload" && "Upload PDF"}
+          </h1>
 
-        <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
-          <input
-            type="text"
-            placeholder="Search PDFs by name..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full sm:w-1/2 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-300"
-            aria-label="Search PDF files"
-          />
-
-          <select
-            value={sortOrder}
-            onChange={(e) => setSortOrder(e.target.value as SortOrder)}
-            className="w-full sm:w-48 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-300"
-            aria-label="Sort by upload date"
-          >
-            <option value="desc">Newest First</option>
-            <option value="asc">Oldest First</option>
-          </select>
-        </div>
-      </header>
-
-      <section className="max-w-7xl mx-auto px-6 pb-10">
-        {sortedFiles.length === 0 ? (
-          <p className="text-center text-gray-500 py-20">
-            No PDF files found matching your search.
-          </p>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {sortedFiles.map(({ id, name, uploadedAt }) => (
-              <Link
-                key={id}
-                href={`/pdf/${id}`}
-                className="group block bg-white rounded-lg shadow-sm hover:shadow-lg transition p-5"
-              >
-                <div className="flex items-start space-x-4">
-                  <div className="text-red-600 text-4xl">
-                    <FaFilePdf />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-md font-semibold text-gray-800 group-hover:text-blue-600 truncate">
-                      {name}
-                    </h3>
-                    <p className="text-sm text-gray-500 mt-1">
-                      Uploaded on{" "}
-                      {new Date(uploadedAt).toLocaleDateString(undefined, {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    </p>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        )}
-      </section>
-    </main>
+          {view === "my" && <MyPdf />}
+          {view === "shared" && <SharedPdf />}
+          {view === "invited" && <InvitedPdf />}
+          {view === "upload" && <UploadPdf />}
+        </main>
+      </div>
+    </div>
   );
 }

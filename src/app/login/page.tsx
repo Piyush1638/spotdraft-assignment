@@ -6,7 +6,6 @@ import { BiShow } from "react-icons/bi";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
-
 interface LoginForm {
   email: string;
   password: string;
@@ -56,7 +55,7 @@ const LoginPage = () => {
         toast.success("Login successful");
         // Redirect to the dashboard or home page
         router.push("/dashboard");
-      }else{
+      } else {
         toast.error(data.message || "Login failed");
       }
     } catch (error) {
@@ -154,6 +153,15 @@ const LoginPage = () => {
             )}
           </div>
 
+           <div>
+            <Link
+              href="/reset-password"
+              className="text-sm text-blue-600 hover:underline"
+            >
+              Forgot password?
+            </Link>
+           </div>
+
           <button
             type="submit"
             disabled={isSubmitting}
@@ -165,10 +173,7 @@ const LoginPage = () => {
 
         <p className="mt-6 text-center text-gray-600 text-sm">
           Don&apos;t have an account?{" "}
-          <Link
-            href="/signup"
-            className="text-blue-600 hover:underline "
-          >
+          <Link href="/signup" className="text-blue-600 hover:underline ">
             Sign Up
           </Link>
         </p>

@@ -23,7 +23,7 @@ const login = async (req: NextRequest) => {
     if (!user) {
       return NextResponse.json(
         {
-          message: "Invalid email or password",
+          message: "Account with this email does not exist",
           success: false,
         },
         { status: 400 }
@@ -51,6 +51,7 @@ const login = async (req: NextRequest) => {
           id: user._id,
           name: user.name,
           email: user.email,
+          sharedFiles: user.sharedFiles,
         },
       },
       { status: 200 }

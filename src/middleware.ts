@@ -7,7 +7,7 @@ export function middleware(request: NextRequest) {
 
   const isAuthPage = url.pathname === "/login" || url.pathname === "/signup";
   const isProtectedPage =
-    url.pathname.startsWith("/dashboard") || url.pathname.startsWith("/profile");
+    url.pathname.startsWith("/dashboard") || url.pathname.startsWith("/profile") || url.pathname.startsWith("/pdf");
 
   // 🚫 Redirect logged-in users away from login/signup
   if (token && isAuthPage) {
@@ -32,6 +32,8 @@ export const config = {
     "/dashboard/:path*",
     "/profile/:path*",
     "/profile",
+    "/pdf/:path*",
+    "/pdf",
   ],
 };
 
