@@ -87,7 +87,17 @@ const CollaborationPage = () => {
   const getPdfDetails = useCallback(async () => {
     try {
       setLoading(true);
-      const res = await fetch(`/api/pdf/details?pdfId=${pdfId}`);
+      if (!pdfId) {
+        toast.error("PDF ID is required to fetch details.");
+        return;
+      }
+      const res = await fetch("/api/pdf/details", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ pdfId }),
+      });
       const data = await res.json();
       if (data.success) {
         setPdfDetails(data.pdfDetails);
@@ -220,13 +230,24 @@ const CollaborationPage = () => {
 
               {hoveredCommentId === reply._id && (
                 <div className="absolute -top-4 right-2 flex space-x-2 text-sm text-gray-300 z-20">
-                  <button
+                  {/* <button
                     className="rounded-full bg-red-800 text-white transition-colors cursor-pointer p-2"
                     onClick={() => deleteComment(reply._id)}
                     aria-label="Delete reply"
                   >
                     <FiTrash2 size={18} />
-                  </button>
+                  </button> */}
+
+                  {user?._id === reply.authorId && (
+                    <button
+                      className="rounded-full bg-red-800 text-white transition-colors cursor-pointer p-2"
+                      onClick={() => deleteComment(reply._id)}
+                      aria-label="Delete comment"
+                    >
+                      <FiTrash2 size={20} />
+                    </button>
+                  )}
+
                   <button
                     className="bg-blue-800 text-white rounded-full transition-colors cursor-pointer p-2"
                     onClick={() => {

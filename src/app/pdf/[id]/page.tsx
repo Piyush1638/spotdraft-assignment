@@ -173,7 +173,7 @@ const Page = () => {
                     <button
                       onClick={() => {
                         navigator.clipboard.writeText(
-                          `${window.location.origin}/pdf/collaborate/${pdfId}/${pdfDetails.shareId}`
+                          `${process.env.NEXT_PUBLIC_BASE_URL}/pdf/collaborate/${pdfId}/${pdfDetails.shareId}`
                         );
                         toast.success("Shareable link copied!");
                       }}
