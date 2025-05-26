@@ -47,7 +47,8 @@ This is a modern web application that enables users to **upload, manage, and col
 
 ## Architecture & Implementation
 
-### All APIs used in this project : 
+### All APIs used in this project :
+
 https://www.postman.com/piyushkumarsingh3669/my-workspace/collection/7h2o671/spotdraft
 
 ### 1. User Authentication
@@ -55,7 +56,7 @@ https://www.postman.com/piyushkumarsingh3669/my-workspace/collection/7h2o671/spo
 - Upon signup or login, the backend API authenticates users and returns a JWT token.
 - The token is saved in cookies/local storage for subsequent API calls.
 - `UserProvider` React Context fetches and stores user data globally on app load.
-- User's email is verified by an email verification 
+- User's email is verified by an email verification
 
 ### 2. PDF Upload Flow
 
@@ -95,7 +96,7 @@ https://www.postman.com/piyushkumarsingh3669/my-workspace/collection/7h2o671/spo
 1. Clone the repo:
 
    ```bash
-   git clone https://github.com/your-username/pdf-collaboration-app.git
+   https://github.com/Piyush1638/spotdraft-assignment.git
    cd pdf-collaboration-app
 
    ```
@@ -111,24 +112,24 @@ https://www.postman.com/piyushkumarsingh3669/my-workspace/collection/7h2o671/spo
 
    ```
 
-3. Create a .env.local file in the root directory and add your environment variables:
-   // Please use your own credientials
-   MONGODB_URI = mongodb+srv://piyushkumarsingh:Piyush1638@cluster0.uxcwmmi.mongodb.net/
-   JWT_SECRET = SpotDraft@Assignment
-   NODE_ENV = development
+3. Create a .env file in the root directory and add your environment variables:
+
+   MONGODB_URI =
+   JWT_SECRET =
+   NODE_ENV = development || production
    NEXT_PUBLIC_BASE_URL = http://localhost:3000
 
    # Related to SMTP
 
-   SMTP_SERVER = smtp-relay.brevo.com
-   SMTP_PORT = 587
-   SMTP_USER = 8da044001@smtp-brevo.com
-   SMTP_PASS = gkO6LHQ2VF4GfJ7p
-   SMTP_FROM = piyushkumarsingh665@gmail.com
+   SMTP_SERVER =
+   SMTP_PORT =
+   SMTP_USER =
+   SMTP_PASS =
+   SMTP_FROM =
 
    # uploadthing
 
-   UPLOADTHING_TOKEN='eyJhcGlLZXkiOiJza19saXZlXzBkMmQ2YWY4Mjg4ODViYjE5MjBlNjAzMWYyNGYzMzg4ZDA1M2I4Y2I2YmQxZDRmMjNmNWViYTRhMGU4NjM0NzciLCJhcHBJZCI6InY5a2U2YTBjamwiLCJyZWdpb25zIjpbInNlYTEiXX0='
+   UPLOADTHING_TOKEN=''
 
 4. Run the development server:
 
@@ -149,4 +150,3 @@ https://www.postman.com/piyushkumarsingh3669/my-workspace/collection/7h2o671/spo
 4. Offline mode and sync support
 
 5. Versioning and change history for PDFs
-
