@@ -6,8 +6,7 @@ export const GET = async (req: NextRequest) => {
   try {
     await connectDB();
 
-    const { searchParams } = new URL(req.url);
-    const pdfId = searchParams.get("pdfId");
+    const pdfId = req.nextUrl.searchParams.get("pdfId");
 
     if (!pdfId) {
       return NextResponse.json(

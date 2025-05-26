@@ -44,6 +44,7 @@ const Page = () => {
     };
 
     const getPdfDetails = async () => {
+      console.log("PdfId: ",pdfId);
       try {
         const res = await fetch(`/api/pdf/details?pdfId=${pdfId}`);
         const data = await res.json();
