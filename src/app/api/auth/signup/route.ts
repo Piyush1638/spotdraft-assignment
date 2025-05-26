@@ -60,6 +60,7 @@ const signUp = async (req: NextRequest) => {
       name,
       email,
       password: hashedPassword,
+      profilePicture: "",
     });
 
     const savedNewUser = await newUser.save();

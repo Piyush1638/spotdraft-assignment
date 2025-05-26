@@ -5,50 +5,39 @@ import getUserToken from "@/helpers/getTokens";
 
 await connectDB();
 
-const getUserData = async (req: NextRequest) => {
+export const POST = async (req: NextRequest) => {
   try {
     const userToken = getUserToken(req);
 
-    // If token is invalid, it will return a NextResponse error — handle that
     if (userToken instanceof NextResponse) return userToken;
 
     const { userId } = userToken;
+    const { url } = await req.json();
 
     const user = await User.findById(userId);
+
     if (!user) {
       return NextResponse.json(
         { message: "User not found", success: false },
         { status: 404 }
       );
     }
-    
+
+    user.profilePicture = url;
+    await user.save();
+
     return NextResponse.json(
       {
-        message: "User data retrieved successfully",
-        user: {
-            userId: user._id,
-            name: user.name,
-            email: user.email,
-            isAccountVerified: user.isAccountVerified,
-            profilePicture: user.profilePicture,
-            sharedFiles: user.sharedFiles,
-        },
+        message: "Profile picture saved successfully",
         success: true,
       },
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error fetching user data:", error);
+    console.error("Internal Server Error:", error);
     return NextResponse.json(
       { message: "Internal server error", success: false },
       { status: 500 }
     );
   }
 };
-
-
-
-export {getUserData as GET};
-
-
-

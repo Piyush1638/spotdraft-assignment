@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+
 .loader {
   border: 2px solid rgba(255, 255, 255, 0.2);
   border-left-color: #ffffff;
@@ -13,4 +14,44 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.react-pdf__Page {
+  box-shadow: none !important;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #4b5563; /* Tailwind gray-600 */
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #6b7280; /* Tailwind gray-500 */
+}
+
+.editor-content {
+  min-height: 1.5rem; /* roughly 1 line height */
+  max-height: none;
+  overflow-y: visible;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+@keyframes fadeSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-slide-up {
+  animation: fadeSlideUp 1s ease forwards;
 }

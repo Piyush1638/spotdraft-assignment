@@ -23,14 +23,14 @@ const isPdfOwner = async (req: NextRequest) => {
     const getPdf = await PDF.findById(pdfId);
     if (!getPdf) {
       return NextResponse.json(
-        { message: "PDF not found", success: false },
+        { message: "PDF doesn't exists!", success: false },
         { status: 404 }
       );
     }
 
     if (getPdf.authorId.toString() !== userId) {
       return NextResponse.json(
-        { message: "Unauthorized user", success: false },
+        { message: "Unauthorized Access!", success: false },
         { status: 401 }
       );
     }

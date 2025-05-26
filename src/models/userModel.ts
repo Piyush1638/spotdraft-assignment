@@ -1,6 +1,5 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-
 // TypeScript interface for type safety
 export interface IUser extends Document {
   name: string;
@@ -8,6 +7,7 @@ export interface IUser extends Document {
   password: string;
   sharedFiles: mongoose.Types.ObjectId[]; // PDFs shared by the user
   verifyOtp: string;
+  profilePicture: string;
   verifyOtpExpireAt: number;
   isAccountVerified: boolean;
   resetOtp: string;
@@ -35,6 +35,10 @@ const userSchema = new Schema<IUser>(
         ref: "PDF",
       },
     ],
+    profilePicture: {
+      type: String,
+      default: "",
+    },
     verifyOtp: {
       type: String,
       default: "",

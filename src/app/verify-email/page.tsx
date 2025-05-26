@@ -172,7 +172,7 @@ const EmailVerificationPage = () => {
 
         <button
           onClick={handleSubmit}
-          className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none"
+          className="w-full cursor-pointer py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none"
         >
           {isSubmitting ? "Verifying..." : "Verify"}
         </button>
@@ -180,7 +180,7 @@ const EmailVerificationPage = () => {
         <button
           onClick={handleResendOtp}
           disabled={isResending || timer > 0}
-          className="w-full py-2 px-4 my-2 border border-blue-600 text-blue-600 font-semibold rounded-md hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full cursor-pointer py-2 px-4 my-2 border border-blue-600 text-blue-600 font-semibold rounded-md hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isResending
             ? "Resending..."

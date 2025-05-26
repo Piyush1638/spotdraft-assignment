@@ -118,7 +118,7 @@ const SignupPage = () => {
           Create your CoDoc account
         </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} autoComplete="off" className="space-y-4">
           <div>
             <label
               htmlFor="name"
@@ -159,6 +159,7 @@ const SignupPage = () => {
               value={formData.email}
               onChange={handleChange}
               placeholder="you@example.com"
+              autoComplete="off"
               aria-required="true"
               aria-invalid={!!errors.email}
               aria-describedby={errors.email ? "email-error" : undefined}
@@ -186,6 +187,7 @@ const SignupPage = () => {
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="••••••••"
+                autoComplete="off"
                 aria-required="true"
                 aria-invalid={!!errors.password}
                 aria-describedby={
@@ -228,7 +230,7 @@ const SignupPage = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="w-full cursor-pointer py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           >
             {isSubmitting ? "Signing up..." : "Sign Up"}
           </button>

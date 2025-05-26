@@ -1,12 +1,19 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
 
 // Simplified user type for global context
 export interface IUserContext {
   _id: string;
   name: string;
   email: string;
+  profilePicture: string;
   sharedFiles: string[]; // Use string[] since ObjectIds will be serialized
 }
 
@@ -32,21 +39,23 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
           headers: {
             "Content-Type": "application/json",
           },
-        }); 
+        });
         const data = await res.json();
         if (res.ok) {
-          setUser(data.user);
+          setUser({
+            _id: data.user.userId, // map userId -> _id here
+            name: data.user.name,
+            email: data.user.email,
+            profilePicture: data.user.profilePicture,
+            sharedFiles: data.user.sharedFiles,
+          });
         } else {
           setUser(null); // Handle error or user not found
         }
-
       } catch (err) {
         console.error("Error fetching user data:", err);
         setUser(null); // not logged in or error
-      } 
-      // finally {
-      //   setLoading(false);
-      // }
+      }
     };
 
     fetchUser();

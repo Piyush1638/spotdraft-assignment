@@ -5,6 +5,7 @@ import { GrFormViewHide } from "react-icons/gr";
 import { BiShow } from "react-icons/bi";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { useUser } from "@/context/UserContext";
 
 interface LoginForm {
   email: string;
@@ -19,6 +20,8 @@ const LoginPage = () => {
   const [errors, setErrors] = useState<Partial<LoginForm>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  const {setUser} = useUser();
 
   const router = useRouter();
 
@@ -54,6 +57,8 @@ const LoginPage = () => {
       if (data.success) {
         toast.success("Login successful");
         // Redirect to the dashboard or home page
+        setUser(data.user);
+        
         router.push("/dashboard");
       } else {
         toast.error(data.message || "Login failed");
@@ -165,7 +170,7 @@ const LoginPage = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="w-full cursor-pointer py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           >
             {isSubmitting ? "Logging in..." : "Login"}
           </button>
