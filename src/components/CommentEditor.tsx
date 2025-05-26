@@ -146,7 +146,7 @@ const CommentEditor = ({ params }: { params: Params }) => {
           className=" p-2 rounded-full cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {uploadingComment ? (
-            "Submitting..."
+           <div className="h-3 w-3 rounded-full border-b border-gray-300 animate-spin"/>
           ) : (
             <IoMdSend className="text-white" />
           )}

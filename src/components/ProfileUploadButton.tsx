@@ -93,7 +93,7 @@ export default function ProfileUploadButton({ onUploadSuccess }: { onUploadSucce
     <div className="flex flex-col items-center justify-center gap-4 transition-colors duration-300 ease-in-out">
       <div
         onClick={handleFileInput}
-        className="cursor-pointer rounded-full border-2 border-dashed border-blue-300 dark:border-blue-600 bg-blue-100 dark:bg-blue-900 hover:bg-blue-200 dark:hover:bg-blue-800 text-blue-800 dark:text-blue-300 px-4 py-10 w-[100px] sm:w-[200px] h-[200px] text-sm font-medium flex items-center justify-center text-center transition"
+        className="cursor-pointer rounded-full border-2 border-dashed border-blue-300 dark:border-blue-600 bg-blue-100 dark:bg-blue-900 hover:bg-blue-200 dark:hover:bg-blue-800 text-blue-800 dark:text-blue-300 px-4 py-10 w-[200px] h-[200px] text-sm font-medium flex items-center justify-center text-center transition"
       >
         Click to upload image
       </div>

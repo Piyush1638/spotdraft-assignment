@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import ProfileUploadButton from "../ProfileUploadButton";
 import Image from "next/image";
+import { useUser } from "@/context/UserContext";
 
 export interface User {
   userId: string;
@@ -17,6 +18,7 @@ export default function Profile() {
   const [profile, setProfile] = useState<User>();
   const [loading, setLoading] = useState(true);
   const [showUploadButton, setShowUploadButton] = useState(false);
+  const { setUser } = useUser();
 
   const fetchProfile = async () => {
     try {
@@ -25,8 +27,16 @@ export default function Profile() {
 
       const data = await response.json();
       if (!data.success) throw new Error(data.message);
+      console.log("Data after uploading profile image:", data);
 
       setProfile(data.user);
+      setUser({
+        _id: data.user.userId, // map userId -> _id here
+        name: data.user.name,
+        email: data.user.email,
+        profilePicture: data.user.profilePicture,
+        sharedFiles: data.user.sharedFiles,
+      });
     } catch (error: unknown) {
       console.error("Error fetching user details:", error);
       toast.error("Something went wrong");
@@ -37,7 +47,7 @@ export default function Profile() {
 
   useEffect(() => {
     fetchProfile();
-  }, []);
+  }, [fetchProfile]);
 
   // Handle successful upload
   const handleUploadSuccess = () => {
@@ -94,16 +104,6 @@ export default function Profile() {
                 <span className="font-semibold">Email:</span> {profile?.email}
               </div>
             </div>
-
-            {/* Edit Link */}
-            {/* <div className="text-center">
-              <a
-                href="/dashboard/edit-profile"
-                className="text-blue-500 dark:text-blue-400 font-medium hover:underline"
-              >
-                Edit Profile
-              </a>
-            </div> */}
           </>
         )}
       </div>

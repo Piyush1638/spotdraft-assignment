@@ -2,12 +2,9 @@
 import { useUser } from "@/context/UserContext";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
-import { HiMenu, HiX } from "react-icons/hi";
 
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
-  const { user } = useUser();
+  const { user, loading } = useUser();
 
   return (
     <nav className="backdrop-blur-md bg-[#0f172a]/70 text-white sticky top-0 z-50 shadow-lg border-b border-white/10">
@@ -25,74 +22,35 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-10 text-sm font-medium">
+        <div className="flex items-center gap-5 sm:gap-10 text-sm font-medium">
           <Link
             href="/dashboard"
             className="hover:text-blue-400 transition duration-200"
           >
             Dashboard
           </Link>
-          {user ? (
-            <div className="h-10 w-10 rounded-full overflow-hidden border border-white relative">
-              <Image
-                src={user.profilePicture || "/images/default-avatar.png"}
-                alt="profile"
-                height={40}
-                width={40}
-                className="object-cover rounded-full"
-              />
-            </div>
-          ) : (
-            <Link
-              href="/login"
-              className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg transition duration-200"
-            >
-              Login
-            </Link>
-          )}
-        </div>
 
-        {/* Mobile Menu Toggle */}
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden text-3xl text-white focus:outline-none"
-          aria-label="Toggle menu"
-        >
-          {isOpen ? <HiX /> : <HiMenu />}
-        </button>
-      </div>
-
-      {/* Mobile Navigation */}
-      {isOpen && (
-        <ul className="md:hidden bg-[#0f172a]/80 backdrop-blur-md text-white px-6 pb-6 space-y-4 text-base font-medium border-t border-white/10">
-          <li>
-            <Link href="/dashboard" onClick={() => setIsOpen(false)}>
-              Dashboard
-            </Link>
-          </li>
-
-          <li>
-            {user ? (
-              <div className="h-10 w-10 rounded-full overflow-hidden border border-white">
+          {!loading &&
+            (user ? (
+              <div className="h-10 w-10 rounded-full overflow-hidden border border-white relative">
                 <Image
                   src={user.profilePicture || "/images/default-avatar.png"}
                   alt="profile"
-                  layout="fill"
-                  className="object-cover"
+                  height={40}
+                  width={40}
+                  className="object-cover rounded-full"
                 />
               </div>
             ) : (
               <Link
                 href="/login"
-                onClick={() => setIsOpen(false)}
-                className="inline-block bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg transition duration-200"
+                className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg transition duration-200"
               >
                 Login
               </Link>
-            )}
-          </li>
-        </ul>
-      )}
+            ))}
+        </div>
+      </div>
     </nav>
   );
 }

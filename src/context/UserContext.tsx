@@ -21,6 +21,7 @@ export interface IUserContext {
 interface UserContextType {
   user: IUserContext | null;
   setUser: (user: IUserContext | null) => void;
+  loading: boolean;
 }
 
 // Create the context
@@ -28,7 +29,7 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 
 // Provider component
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-  // const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<IUserContext | null>(null);
 
   useEffect(() => {
@@ -55,6 +56,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       } catch (err) {
         console.error("Error fetching user data:", err);
         setUser(null); // not logged in or error
+      } finally {
+        setLoading(false); 
       }
     };
 
@@ -62,7 +65,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, setUser, loading }}>
       {children}
     </UserContext.Provider>
   );

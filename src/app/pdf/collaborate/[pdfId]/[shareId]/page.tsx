@@ -218,7 +218,7 @@ const CollaborationPage = () => {
                       {reply.authorName}
                     </span>
                     <span className="text-xs text-gray-400">
-                      {new Date(reply.createdAt).toLocaleString()}
+                      {formatCommentTime(reply.createdAt)}
                     </span>
                   </div>
                   <p
@@ -230,14 +230,6 @@ const CollaborationPage = () => {
 
               {hoveredCommentId === reply._id && (
                 <div className="absolute -top-4 right-2 flex space-x-2 text-sm text-gray-300 z-20">
-                  {/* <button
-                    className="rounded-full bg-red-800 text-white transition-colors cursor-pointer p-2"
-                    onClick={() => deleteComment(reply._id)}
-                    aria-label="Delete reply"
-                  >
-                    <FiTrash2 size={18} />
-                  </button> */}
-
                   {user?._id === reply.authorId && (
                     <button
                       className="rounded-full bg-red-800 text-white transition-colors cursor-pointer p-2"
@@ -285,7 +277,7 @@ const CollaborationPage = () => {
             className="flex-1 grid grid-cols-1 lg:grid-cols-3 py-4 overflow-hidden"
             style={{ height: "calc(100vh - 56px)" }}
           >
-            <div className="col-span-2 p-4 flex flex-col overflow-hidden">
+            <div className="col-span-2 p-4 flex flex-col overflow-auto">
               <div className="bg-gray-800 rounded-xl shadow-md flex-1 flex justify-center items-center overflow-hidden">
                 {loading ? (
                   <div className="text-gray-500 animate-pulse text-lg">

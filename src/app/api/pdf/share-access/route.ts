@@ -36,7 +36,7 @@ const shareAccess = async (req: NextRequest) => {
       );
     }
 
-const currentUser = await User.findById(userId);
+    const currentUser = await User.findById(userId);
     if (!currentUser) {
       return NextResponse.json(
         { message: "Current user not found", success: false },

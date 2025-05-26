@@ -5,9 +5,11 @@ import toast from "react-hot-toast";
 
 const LogoutButton = () => {
   const router = useRouter();
+  const [loading, setLoading] = React.useState(false);
 
   const handleLogout = async () => {
     try {
+      setLoading(true);
       const response = await fetch("/api/auth/logout", {
         method: "POST",
         headers: {
@@ -28,6 +30,8 @@ const LogoutButton = () => {
     } catch (error) {
       console.error("Logout error:", error);
       toast.error("Logout failed. Please try again.");
+    } finally{
+      setLoading(false);
     }
   };
 
@@ -36,7 +40,9 @@ const LogoutButton = () => {
       onClick={handleLogout}
       className="px-4 py-2 cursor-pointer border border-red-600 w-full  text-red-600 hover:text-white font-medium rounded-md shadow hover:bg-red-700  "
     >
-      Logout
+     {
+      loading ? "Logging out..." : "Logout"
+     }
     </button>
   );
 };
