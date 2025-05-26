@@ -12,20 +12,20 @@ export default function Home() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="relative py-20 px-6 min-h-screen sm:px-12 lg:flex lg:items-center">
+      <section className="relative flex flex-col justify-center items-center h-screen px-6 sm:px-12 md:min-h-screen lg:flex-row lg:items-center lg:px-12">
         <div className="max-w-2xl mx-auto text-center lg:text-left">
           <h1 className="text-4xl sm:text-5xl font-bold mb-6 leading-tight animate-fade-slide-up">
             Collaborate on PDFs
             <br className="hidden sm:inline" /> like never before.
           </h1>
           <p className="text-lg text-gray-400 mb-8">
-            Upload, manage, and share PDF documents with ease. <br />
-            Intuitive interface, and seamless sharing—built for productivity.
+            Upload, manage, and share PDF documents with ease. Intuitive
+            interface, and seamless sharing—built for productivity.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
             <Link
               href={"/dashboard"}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+              className="w-fit sm:mx-0  mx-auto px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
             >
               Get Started
             </Link>

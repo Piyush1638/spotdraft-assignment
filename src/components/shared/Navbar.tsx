@@ -32,18 +32,6 @@ export default function Navbar() {
           >
             Dashboard
           </Link>
-          <Link
-            href="/about"
-            className="hover:text-blue-400 transition duration-200"
-          >
-            About
-          </Link>
-          <Link
-            href="/contact"
-            className="hover:text-blue-400 transition duration-200"
-          >
-            Contact
-          </Link>
           {user ? (
             <div className="h-10 w-10 rounded-full overflow-hidden border border-white relative">
               <Image
@@ -82,16 +70,7 @@ export default function Navbar() {
               Dashboard
             </Link>
           </li>
-          <li>
-            <Link href="/about" onClick={() => setIsOpen(false)}>
-              About
-            </Link>
-          </li>
-          <li>
-            <Link href="/contact" onClick={() => setIsOpen(false)}>
-              Contact
-            </Link>
-          </li>
+
           <li>
             {user ? (
               <div className="h-10 w-10 rounded-full overflow-hidden border border-white">
