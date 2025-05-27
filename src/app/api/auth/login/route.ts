@@ -62,12 +62,13 @@ const login = async (req: NextRequest) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      maxAge: 7 * 24 * 60 * 60, // 7 days in seconds
+      path: "/", // 👈 necessary for middleware to access it
     });
 
     return response;
   } catch (error) {
-    console.error("Login error:", error); 
+    console.error("Login error:", error);
     return NextResponse.json(
       {
         message: "Internal server error",
