@@ -10,7 +10,7 @@ const EmailVerificationPage = () => {
   const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const routere = useRouter();
+  const router = useRouter();
 
   useEffect(() => {
     let countdown: NodeJS.Timeout;
@@ -78,7 +78,7 @@ const EmailVerificationPage = () => {
       const data = await verifyOTPRes.json();
       if (data.success) {
         toast.success("Email verified successfully!");
-        routere.push("/dashboard");
+        router.push("/dashboard");
       } else {
         toast.error(data.message || "Invalid OTP");
       }

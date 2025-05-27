@@ -75,13 +75,16 @@ const SignupPage = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
-      });
+      });      
 
-      if (!res.ok) throw new Error("Signup failed");
+
       const data = await res.json();
-      console.log("Signup successful:", data);
-
       // send email verification OTP
+      if(!data.success) {
+        toast.error(data.message || "Something went wrong");
+        return;
+      }
+
       const emailRes = await fetch("/api/auth/verification-email", {
         method: "POST",
         headers: {
