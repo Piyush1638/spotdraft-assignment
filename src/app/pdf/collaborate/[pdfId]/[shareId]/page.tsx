@@ -49,6 +49,9 @@ const CollaborationPage = () => {
     {}
   );
 
+  const [getAllCommentsLoading, setGetAllCommentsLoading] = useState(false);
+
+
   const checkAccess = useCallback(async () => {
     try {
       const response = await fetch(
@@ -113,6 +116,7 @@ const CollaborationPage = () => {
 
   const getAllComments = useCallback(async () => {
     try {
+      setGetAllCommentsLoading(true);
       const res = await fetch(`/api/pdf/fetch-comments?pdfId=${pdfId}`);
       const data = await res.json();
       if (data.success) {
@@ -122,6 +126,8 @@ const CollaborationPage = () => {
       }
     } catch {
       toast.error("Error fetching comments.");
+    } finally{
+      setGetAllCommentsLoading(false);
     }
   }, [pdfId]);
 
@@ -295,7 +301,7 @@ const CollaborationPage = () => {
                 <button
                   onClick={getAllComments}
                   className={`bg-gray-700 cursor-pointer rounded-full p-2 flex items-center justify-center text-white ${
-                    loading && "animate-spin"
+                    getAllCommentsLoading && "animate-spin"
                   }`}
                 >
                   <LuRefreshCcw />
@@ -320,7 +326,7 @@ const CollaborationPage = () => {
                             alt="avatar"
                             width={40} // for w-10 h-10
                             height={40}
-                            className="rounded-full object-cover ring-2 ring-blue-500"
+                            className="rounded-full object-cover aspect-square ring-2 ring-blue-500"
                           />
 
                           <div className="flex-1">

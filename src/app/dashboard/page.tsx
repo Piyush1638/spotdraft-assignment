@@ -20,6 +20,8 @@ export default function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { user } = useUser();
 
+  console.log("user name: ", user?.name)
+
   useEffect(() => setHasMounted(true), []);
   if (!hasMounted) return null;
 
@@ -80,14 +82,14 @@ export default function Dashboard() {
         {/* Bottom part: User info + Logout */}
         <div className="p-4 flex flex-col gap-4 border-t border-white/10">
           {user && (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               <div className="w-10 h-10 rounded-full bg-white overflow-hidden border relative">
                 {user.profilePicture ? (
                   <Image
                     src={user.profilePicture}
                     alt={`${user.name}'s profile picture`}
                     fill
-                    style={{ objectFit: "cover" }}
+                    className="object-cover" // Remove aspect-square here
                   />
                 ) : (
                   <span className="text-[#0f172a] font-semibold flex items-center justify-center h-full">
@@ -95,6 +97,7 @@ export default function Dashboard() {
                   </span>
                 )}
               </div>
+
               <div className="flex flex-col overflow-hidden">
                 <span className="text-sm truncate">{user.name}</span>
                 <span className="text-xs text-gray-300 truncate">

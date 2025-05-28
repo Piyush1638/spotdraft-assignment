@@ -7,6 +7,7 @@ import { IPDF } from "@/models/pdfModel";
 import ShareAccessForm from "@/components/ShareAccessForm";
 import Navbar from "@/components/shared/Navbar";
 import Link from "next/link";
+import PDFViewer from "@/components/collaboration/PDFViewer";
 
 const Page = () => {
   const params = useParams();
@@ -16,6 +17,7 @@ const Page = () => {
   const [error, setError] = useState(false);
   const [pdfDetails, setPdfDetails] = useState<IPDF>();
   const [isPdfDeleting, setIsPdfDeleting] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!pdfId) return;
@@ -44,9 +46,9 @@ const Page = () => {
     };
 
     const getPdfDetails = async () => {
-      console.log("PdfId: ",pdfId);
       try {
-        const res = await fetch("/api/pdf/details",{
+        setLoading(true);
+        const res = await fetch("/api/pdf/details", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ pdfId }),
@@ -59,6 +61,8 @@ const Page = () => {
         }
       } catch {
         toast.error("Error fetching details.");
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -83,13 +87,13 @@ const Page = () => {
 
       if (data.success) {
         toast.success("PDF deleted successfully");
-        router.push("/dashboard"); // redirect to dashboard
+        router.push("/dashboard");
       } else {
         toast.error(data.message || "Failed to delete PDF");
       }
     } catch (error) {
       toast.error("Error deleting PDF");
-      console.log(error)
+      console.log(error);
     } finally {
       setIsPdfDeleting(false);
     }
@@ -118,34 +122,33 @@ const Page = () => {
 
           {pdfDetails && (
             <div className="flex flex-col lg:flex-row gap-10">
-              {/* PDF Viewer */}
-              <section className="lg:flex-1 bg-gray-900 rounded-2xl shadow-2xl border border-gray-700 overflow-hidden aspect-[3/4] max-h-[80vh]">
-                <embed
-                  src={pdfDetails.url}
-                  type="application/pdf"
-                  width="100%"
-                  height="100%"
-                  className="w-full h-full"
-                />
+              {/* PDF Viewer on Left */}
+              <section className="w-full lg:w-2/3 bg-gray-800 rounded-xl shadow-md flex justify-center items-center overflow-hidden min-h-[400px]">
+                {loading ? (
+                  <div className="text-gray-500 animate-pulse text-lg">
+                    Loading PDF...
+                  </div>
+                ) : (
+                  <PDFViewer fileUrl={pdfDetails?.url as string} />
+                )}
               </section>
 
-              {/* Sidebar Info + Actions */}
-              <aside className="lg:w-[450px] flex flex-col space-y-8">
-                {/* PDF Metadata */}
-                <div className="bg-gray-900 rounded-2xl p-8 border border-gray-700 shadow-inner">
+              {/* Details on Right */}
+              <aside className="w-full lg:w-1/3 flex flex-col space-y-8">
+                <div className="bg-gray-900 rounded-2xl p-6 border border-gray-700 shadow-inner">
                   <h2 className="text-xl font-semibold text-white mb-6">
                     Document Details
                   </h2>
                   <dl className="space-y-4 text-gray-300">
-                    <div className="flex gap-4">
+                    <div className="flex gap-2 flex-wrap">
                       <dt className="font-medium">Name:</dt>
                       <dd>{pdfDetails.name}</dd>
                     </div>
-                    <div className="flex gap-4">
+                    <div className="flex gap-2 flex-wrap">
                       <dt className="font-medium">Size:</dt>
                       <dd>{(pdfDetails.size / 1024).toFixed(2)} KB</dd>
                     </div>
-                    <div className="flex gap-4">
+                    <div className="flex gap-2 flex-col sm:flex-row">
                       <dt className="font-medium">URL:</dt>
                       <dd className="break-words">
                         <a
@@ -158,18 +161,17 @@ const Page = () => {
                         </a>
                       </dd>
                     </div>
-                    {/* Delete Button */}
-                    <button
-                      onClick={handleDelete}
-                      className="mt-4 w-fit p-2 cursor-pointer bg-red-900 hover:bg-red-700 text-white font-semibold text-sm rounded-lg shadow-md transition"
-                      aria-label="Delete PDF"
-                    >
-                      {isPdfDeleting ? "Deleting..." : "Delete PDF"}
-                    </button>
                   </dl>
 
-                  {/* Share Links */}
-                  <div className="mt-8 flex flex-col sm:flex-row gap-4">
+                  <button
+                    onClick={handleDelete}
+                    className="mt-6 w-full py-2 bg-red-900 hover:bg-red-700 text-white font-semibold text-sm rounded-lg shadow-md transition"
+                    aria-label="Delete PDF"
+                  >
+                    {isPdfDeleting ? "Deleting..." : "Delete PDF"}
+                  </button>
+
+                  <div className="mt-6 flex flex-col sm:flex-row gap-4">
                     <button
                       onClick={() => {
                         navigator.clipboard.writeText(
@@ -192,7 +194,7 @@ const Page = () => {
                         pdfDetails.shareId
                       }
                       rel="noopener noreferrer"
-                      className="text-sm flex-1 px-5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold shadow-md text-center transition"
+                      className="text-sm px-5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold shadow-md text-center transition"
                       aria-label="Open collaborative link"
                     >
                       Open in collaboration
@@ -200,8 +202,7 @@ const Page = () => {
                   </div>
                 </div>
 
-                {/* Share Access Form */}
-                <div className="bg-gray-900 rounded-2xl p-8 border border-gray-700 shadow-lg">
+                <div className="bg-gray-900 rounded-2xl p-6 border border-gray-700 shadow-lg">
                   <ShareAccessForm pdfId={pdfId} />
                 </div>
               </aside>

@@ -3,6 +3,8 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { FiTrash } from "react-icons/fi";
+
 
 interface ShareAccessFormProps {
   pdfId: string;
@@ -108,21 +110,21 @@ const ShareAccessForm: React.FC<ShareAccessFormProps> = ({ pdfId }) => {
   }, []);
 
   return (
-    <div className="space-y-6 mt-6 max-w-md text-gray-200">
+    <div className="space-y-6 mt-6 w-full max-w-md text-gray-200">
       <form onSubmit={handleSubmit} className="space-y-4">
         <h2 className="text-lg font-semibold text-white">Share Access</h2>
-        <div className="flex flex-col sm:flex-row gap-3">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 w-full">
           <input
             type="email"
             placeholder="Enter email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="flex-1 px-4 py-2 rounded-md bg-gray-800 border border-gray-700 placeholder-gray-400 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+            className="flex-1 px-4 py-2 rounded-md bg-gray-800 border border-gray-700 placeholder-gray-400 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition w-full"
           />
           <button
             type="submit"
             disabled={isSubmitting}
-            className={`px-5 py-2 rounded-md cursor-pointer text-white font-semibold bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 transition`}
+            className="w-full sm:w-auto px-5 py-2 rounded-md cursor-pointer text-white font-semibold bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 transition"
           >
             {isSubmitting ? "Sharing..." : "Share"}
           </button>
@@ -136,27 +138,29 @@ const ShareAccessForm: React.FC<ShareAccessFormProps> = ({ pdfId }) => {
             {sharedList.map((user) => (
               <li
                 key={user.userId}
-                className="flex items-center justify-between p-2 bg-gray-900 rounded-md"
+                className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-2 p-2 bg-gray-900 rounded-md"
               >
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-3 min-w-0">
                   <Image
                     src={user.profilePicture || "/images/default-avatar.png"}
                     alt="Profile"
-                    width={30} // 10 * 4 (Tailwind's w-10 means 2.5rem = 40px)
-                    height={30} // same as width for a square
+                    width={30}
+                    height={30}
                     className="rounded-full object-cover border border-gray-700 aspect-square"
                   />
-                  <span className="text-gray-200 text-sm">{user.email}</span>
+                  <span className="text-gray-200 text-sm truncate">
+                    {user.email}
+                  </span>
                 </div>
                 <button
                   onClick={() => handleRemoveAccess(user.userId)}
                   disabled={isRemoving === user.userId}
-                  className="text-sm cursor-pointer bg-red-900 hover:bg-red-700 disabled:bg-red-400 text-white px-3 py-1 rounded transition"
+                  className="text-sm bg-red-900 hover:bg-red-700 disabled:bg-red-400 text-white p-2 transition  rounded-full cursor-pointer text-center"
                 >
-                  {isRemoving === user.userId ? (
+                   {isRemoving === user.userId ? (
                     <div className="h-4 w-4 border-2 border-l-white border-t-transparent border-r-transparent border-b-transparent animate-spin rounded-full" />
                   ) : (
-                    "Remove"
+                    <FiTrash size={16} />
                   )}
                 </button>
               </li>

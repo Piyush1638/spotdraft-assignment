@@ -4,6 +4,7 @@ import User from "@/models/userModel";
 import { PDF } from "@/models/pdfModel";
 import transporter from "@/helpers/nodemailer";
 import getUserToken from "@/helpers/getTokens";
+import { Types } from "mongoose";
 
 const removeAccess = async (req: NextRequest) => {
   try {
@@ -56,6 +57,12 @@ const removeAccess = async (req: NextRequest) => {
       );
     }
 
+    currentUser.sharedFiles = currentUser.sharedFiles.filter(
+      (id: Types.ObjectId) => id.toString() !== pdfId
+    );
+
+    currentUser.save();
+
     // This below is to send email to the user
     const removedUser = await User.findById(userIdToRemove as string);
     if (!removedUser) {
@@ -102,4 +109,5 @@ const removeAccess = async (req: NextRequest) => {
   }
 };
 
-export { removeAccess as POST };
+export { removeAccess as POST }; 
+

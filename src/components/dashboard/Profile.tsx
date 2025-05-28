@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import toast from "react-hot-toast";
 import ProfileUploadButton from "../ProfileUploadButton";
 import Image from "next/image";
@@ -16,11 +16,11 @@ export interface User {
 
 export default function Profile() {
   const [profile, setProfile] = useState<User>();
-  const [loading, setLoading] = useState(true);
+  const [apiFetchLoading, setApiFetchLoading] = useState(true);
   const [showUploadButton, setShowUploadButton] = useState(false);
-  const { setUser } = useUser();
+  const { setUser, loading } = useUser();
 
-  const fetchProfile = async () => {
+  const fetchProfile = useCallback(async () => {
     try {
       const response = await fetch("/api/user/data/user-data");
       if (!response.ok) throw new Error("Failed to fetch user details");
@@ -41,9 +41,9 @@ export default function Profile() {
       console.error("Error fetching user details:", error);
       toast.error("Something went wrong");
     } finally {
-      setLoading(false);
+      setApiFetchLoading(false);
     }
-  };
+  }, [setUser]);
 
   useEffect(() => {
     fetchProfile();
@@ -62,7 +62,7 @@ export default function Profile() {
           My Profile
         </h1>
 
-        {loading ? (
+        {apiFetchLoading ? (
           <p className="text-center text-gray-500 dark:text-gray-300">
             Loading...
           </p>
@@ -70,15 +70,17 @@ export default function Profile() {
           <>
             {/* Profile Picture Section */}
             <div className="flex flex-col items-center space-y-3">
-              {!profile?.profilePicture || showUploadButton ? (
+              {loading ? (
+                <div className="h-10 w-10 rounded-full border-b border-blue-600 animate-spin" />
+              ) : !profile?.profilePicture || showUploadButton ? (
                 <ProfileUploadButton onUploadSuccess={handleUploadSuccess} />
               ) : (
                 <>
                   <Image
                     src={profile.profilePicture || "/default-profile.png"}
                     alt="Profile"
-                    width={96} // w-24 = 6rem = 96px
-                    height={96} // h-24 = 6rem = 96px
+                    width={96}
+                    height={96}
                     className="aspect-square rounded-full shadow object-cover border border-gray-300 dark:border-gray-700"
                   />
                   <button
