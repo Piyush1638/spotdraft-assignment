@@ -27,7 +27,6 @@ export default function Profile() {
 
       const data = await response.json();
       if (!data.success) throw new Error(data.message);
-      console.log("Data after uploading profile image:", data);
 
       setProfile(data.user);
       setUser({

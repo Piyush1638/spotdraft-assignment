@@ -20,8 +20,6 @@ export default function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { user } = useUser();
 
-  console.log("user name: ", user?.name)
-
   useEffect(() => setHasMounted(true), []);
   if (!hasMounted) return null;
 
